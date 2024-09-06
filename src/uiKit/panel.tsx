@@ -1,17 +1,17 @@
 import { Panel as ResizablePanel, PanelGroup } from 'react-resizable-panels';
 import { Colors } from '@blueprintjs/core';
 
-export const OuterPanel: React.FC<React.PropsWithChildren> = ({ children }) => (
+export const OuterPanel: React.FC<
+  React.ComponentPropsWithRef<typeof PanelGroup>
+> = (props) => (
   <PanelGroup
-    direction='horizontal'
+    {...props}
     style={{
       background: Colors.GRAY5,
       width: '100%',
       height: '100%',
     }}
-  >
-    {children}
-  </PanelGroup>
+  />
 );
 
 export const Panel: React.FC<
