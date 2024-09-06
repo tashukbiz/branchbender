@@ -1,10 +1,15 @@
 import { createRoot } from 'react-dom/client';
+import { OuterPanel, Panel } from './uiKit/panel';
+import { PanelResizeHandle } from 'react-resizable-panels';
 
 const App = () => (
-  <>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your React Electron application.</p>
-  </>
+  <OuterPanel direction='horizontal'>
+    <Panel defaultSize={30} minSize={20}>
+      left
+    </Panel>
+    <PanelResizeHandle />
+    <Panel minSize={20}>main</Panel>
+  </OuterPanel>
 );
 
 const root = createRoot(document.body);
