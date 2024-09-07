@@ -7,5 +7,6 @@ import { GitHandles } from './ipcHandles';
 contextBridge.exposeInMainWorld('gitApi', {
   selectRepositoryPath: () =>
     ipcRenderer.invoke(GitHandles.SelectRepositoryPath),
-  getBranches: () => ipcRenderer.invoke(GitHandles.GetBranches),
+  getBranches: (repositoryPath: string) =>
+    ipcRenderer.invoke(GitHandles.GetBranches, repositoryPath),
 });

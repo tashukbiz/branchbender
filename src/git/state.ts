@@ -1,20 +1,20 @@
-import { atom, selector } from 'recoil';
+import { atom } from 'jotai';
+import { atomWithDefault, atomWithRefresh } from 'jotai/utils';
 
-export const repositoryPathQuery = selector({
-  key: 'repositoryPath',
-  get: async () => window.gitApi.selectRepositoryPath(),
-});
-export const branchesQuery = selector({
-  key: 'branches',
-  get: async () => window.gitApi.getBranches(repositoryPathQuery),
-});
+const gitApi = (window as any).gitApi;
 
-export const defaultBranchState = atom({
-  key: 'defaultBranch',
-  default: 'main',
+export const repositoryPathQuery = atomWithRefresh(
+  async () => gitApi.selectRepositoryPath() as Promise<string>
+);
+export const branchesQuery = atomWithRefresh(async (get) => {
+  const repositoryPath = await get(repositoryPathQuery);
+  const branches = await (gitApi.getBranches(repositoryPath) as Promise<
+    string[]
+  >);
+  return branches.map((branch) => branch.replace(/^\*\s+/, '')).filter(Boolean);
 });
+export const defaultBranchState = atom('main');
 
-export const currentBranchState = atom({
-  key: 'currentBranch',
-  default: defaultBranchState,
-});
+export const currentBranchState = atomWithDefault((get) =>
+  get(defaultBranchState)
+);

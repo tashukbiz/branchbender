@@ -1,25 +1,26 @@
 import { createRoot } from 'react-dom/client';
 import { OuterPanel, Panel } from './uiKit/panel';
 import { PanelResizeHandle } from 'react-resizable-panels';
-import { RecoilRoot } from 'recoil';
 import { BranchList } from './branchList';
 import { Suspense } from 'react';
 import { Status } from './status';
 
+const Loading = () => <div>Loading...</div>;
+
 const App = () => (
-  <RecoilRoot>
-    <OuterPanel direction='horizontal'>
-      <Panel defaultSize={30} minSize={20}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <BranchList />
-        </Suspense>
-      </Panel>
-      <PanelResizeHandle />
-      <Panel minSize={20}>
+  <OuterPanel direction='horizontal'>
+    <Panel defaultSize={30} minSize={20}>
+      <Suspense fallback={<Loading />}>
+        <BranchList />
+      </Suspense>
+    </Panel>
+    <PanelResizeHandle />
+    <Panel minSize={20}>
+      <Suspense fallback={<Loading />}>
         <Status />
-      </Panel>
-    </OuterPanel>
-  </RecoilRoot>
+      </Suspense>
+    </Panel>
+  </OuterPanel>
 );
 
 const root = createRoot(document.getElementById('root'));

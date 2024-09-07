@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import {
   currentBranchState,
   defaultBranchState,
@@ -6,9 +6,9 @@ import {
 } from './git/state';
 
 export const Status = () => {
-  const repositoryPath = useRecoilValue(repositoryPathQuery);
-  const [defaultBranch] = useRecoilState(defaultBranchState);
-  const [currentBranch] = useRecoilState(currentBranchState);
+  const repositoryPath = useAtomValue(repositoryPathQuery);
+  const defaultBranch = useAtomValue(defaultBranchState);
+  const currentBranch = useAtomValue(currentBranchState);
 
   return (
     <div>

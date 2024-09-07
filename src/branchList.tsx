@@ -1,16 +1,15 @@
-import {
-  useRecoilRefresher_UNSTABLE,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
 import { Button, Classes, Tree, TreeNodeInfo } from '@blueprintjs/core';
-import { branchesQuery, currentBranchState } from './git/state';
+import {
+  branchesQuery,
+  currentBranchState,
+  repositoryPathQuery,
+} from './git/state';
+import { useAtom, useSetAtom } from 'jotai';
 
 export const BranchList = () => {
-  const branches = useRecoilValue(branchesQuery);
-  const refreshBranches = useRecoilRefresher_UNSTABLE(branchesQuery);
-
-  const [currentBranch, setCurrentBranch] = useRecoilState(currentBranchState);
+  const [branches, refreshBranches] = useAtom(branchesQuery);
+  const pickRepo = useSetAtom(repositoryPathQuery);
+  const [currentBranch, setCurrentBranch] = useAtom(currentBranchState);
 
   const branchNodes = branches.map((branch) => ({
     id: branch,
@@ -18,16 +17,23 @@ export const BranchList = () => {
     isSelected: branch === currentBranch,
   }));
 
-  const handleBranchClick = (node: TreeNodeInfo) => {
+  const onRefreshClick = () => {
+    refreshBranches();
+  };
+  const onBranchClick = (node: TreeNodeInfo) => {
     setCurrentBranch(node.id as string);
+  };
+  const onPickRepoClick = () => {
+    pickRepo();
   };
 
   return (
     <div>
-      <Button onClick={refreshBranches}>Refresh</Button>
+      <Button onClick={onRefreshClick}>Refresh</Button>
+      <Button onClick={onPickRepoClick}>Repo</Button>
       <Tree
         contents={branchNodes}
-        onNodeClick={handleBranchClick}
+        onNodeClick={onBranchClick}
         // onNodeCollapse={handleNodeCollapse}
         // onNodeExpand={handleNodeExpand}
         className={Classes.ELEVATION_0}
